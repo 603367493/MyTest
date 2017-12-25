@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cm.vo.DictionaryItemVO">
+
+	<select id="getContentByCodeAndId" resultType="com.cm.vo.DictionaryItemVO" parameterType="map">
+		select * from dictionary_item where dictionary_id=#{dictionary_id} and code = #{code}
+	</select>
+	
+	<select id="getContentById" resultType="com.cm.vo.DictionaryItemVO" parameterType="map">
+		select * from dictionary_item where dictionary_id=#{dictionary_id} 
+	</select>
+
+</mapper>

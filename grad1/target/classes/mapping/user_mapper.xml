@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cm.vo.UserVO">
+    <!-- 登录检验 -->
+	<select id="login" resultType="com.cm.vo.UserVO" parameterType="map">
+		select *  from user where acc = #{acc} and pwd=#{pwd} and delete_flag=0
+	</select>
+	
+	<update id="updateLastTime" parameterType="map" >
+		update user set last_login_time = #{last_login_time} where id=#{id}
+	</update>
+	
+	<update id="updatePwd" parameterType="map" >
+		update user set pwd = #{pwd} where id=#{id}
+	</update>
+	
+	<select id="getUserList" resultType="com.cm.vo.UserVO" parameterType="map">
+		select * from user
+		 where power = 2 and delete_flag = 0 order by id
+	</select>
+	
+	<select id="getUserByIdOrAcc" resultType="com.cm.vo.UserVO" parameterType="map">
+		select * from user where delete_flag = 0  
+		<if test="user_id != null ">and id = #{user_id}</if>
+		<if test="acc != null">and acc = #{acc}</if>
+	</select>
+	
+	<sql id="insert_user">
+        <trim suffix="" suffixOverrides=",">
+            <if test="name != null">
+                name,
+            </if>
+            <if test="address != null">
+                address,
+            </if>
+            <if test="phone != 0">
+                phone,
+            </if>
+            <if test="mobile !=null ">
+                mobile,
+            </if>
+            <if test="acc != null">
+                acc,
+            </if>
+            <if test="pwd != null ">
+                pwd,
+            </if>
+            <if test="idcard != null">
+                idcard,
+            </if>
+            <if test="delete_flag != 0">
+                delete_flag,
+            </if>
+            <if test="image_url != null">
+                image_url,
+            </if>
+            <if test="last_login_time != null">
+                last_login_time,
+            </if>
+            <if test="publish_time != null">
+                publish_time,
+            </if>
+            <if test="publish_id != 0">
+                publish_id,
+            </if>
+            <if test="publish_name != null">
+                publish_name,
+            </if>
+            <if test="price != 0">
+                price,
+            </if>
+        </trim>
+    </sql>
+    <sql id="insert_value_user">
+        <trim suffix="" suffixOverrides=",">
+             <if test="name != null">
+                #{name},
+            </if>
+            <if test="address != null">
+                #{address},
+            </if>
+            <if test="phone != 0">
+                #{phone},
+            </if>
+            <if test="mobile !=null ">
+                #{mobile},
+            </if>
+            <if test="acc != null">
+                #{acc},
+            </if>
+            <if test="pwd != null ">
+                #{pwd},
+            </if>
+            <if test="idcard != null">
+                #{idcard},
+            </if>
+            <if test="delete_flag != 0">
+                #{delete_flag},
+            </if>
+            <if test="image_url != null">
+                #{image_url},
+            </if>
+            <if test="last_login_time != null">
+                #{last_login_time},
+            </if>
+            <if test="publish_time != null">
+                #{publish_time},
+            </if>
+            <if test="publish_id != 0">
+                #{publish_id},
+            </if>
+            <if test="publish_name != null">
+                #{publish_name},
+            </if>
+            <if test="price != 0">
+                #{price},
+            </if>
+        </trim>
+    </sql>
+	
+	
+	<insert id="addUser" parameterType="com.cm.vo.UserVO">
+		insert into user(<include refid="insert_user"/>)
+		values(<include refid="insert_value_user"/>)
+	</insert>
+	
+	<update id="updateUser" parameterType="com.cm.vo.UserVO">
+		update user 
+		<trim prefix="set" suffixOverrides=",">
+			<if test="name != null">name = #{name},</if>
+			<if test="address != null">address = #{address},</if>
+			<if test="phone != null">phone = #{phone},</if>
+			<if test="mobile != null">mobile = #{mobile},</if>
+			<if test="acc != null">acc = #{acc},</if>
+			<if test="pwd != null">pwd=#{pwd},</if>
+			<if test="power != 0">power=#{power},</if>
+			<if test="idcard != null">idcard=#{idcard},</if>
+			<if test="image_url != null">image_url=#{image_url},</if>
+			<if test="delete_flag != 0">delete_flag=#{delete_flag},</if>
+            <if test="last_login_time != null">last_login_time=#{last_login_time},</if>
+			<if test="publish_time != null">publish_time=#{publish_time},</if>
+			<if test="publish_id != 0">publish_id=#{publish_id},</if>
+			<if test="publish_name != null">publish_name=#{publish_name},</if>
+			<if test="price != 0">price=#{price},</if>
+
+		</trim>
+		where id = #{id}
+	</update>
+	
+</mapper>

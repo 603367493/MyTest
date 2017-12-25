@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cm.vo.FamilyVO">
+
+	<select id="getFamilyList" resultType="com.cm.vo.FamilyVO" parameterType="map">
+		select * from family where delete_flag=0 and user_id = #{user_id}
+	</select>
+
+	<select id="getFamily" resultType="com.cm.vo.FamilyVO" parameterType="map">
+		select * from family where user_id = #{user_id} and delete_flag = 0
+	</select>
+	
+	<sql id="insert_family">
+        <trim suffix="" suffixOverrides=",">
+            <if test="user_id != 0">
+                user_id,
+            </if>
+            <if test="relation_id != 0">
+                relation_id,
+            </if>
+            <if test="phone != null">
+                phone,
+            </if>
+            <if test="name !=null ">
+                name,
+            </if>
+            <if test="delete_flag != 0">
+                delete_flag,
+            </if>
+            <if test="publish_time != null">
+                publish_time,
+            </if>
+            <if test="publish_id != 0">
+                publish_id,
+            </if>
+            <if test="publish_name != null">
+                publish_name,
+            </if>
+        </trim>
+    </sql>
+    <sql id="insert_value_family">
+        <trim suffix="" suffixOverrides=",">
+
+        
+             <if test="user_id != 0">
+                #{user_id},
+            </if>
+            <if test="relation_id != 0">
+                #{relation_id},
+            </if>
+             <if test="phone != null">
+                #{phone},
+            </if>
+            <if test="name != null">
+                #{name},
+            </if>
+            <if test="delete_flag != 0">
+                #{delete_flag},
+            </if>
+            <if test="publish_time != null">
+                #{publish_time},
+            </if>
+            <if test="publish_id != 0">
+                #{publish_id},
+            </if>
+            <if test="publish_name != null">
+                #{publish_name},
+            </if>
+        </trim>
+    </sql>
+	
+	
+	<insert id="addFamily" parameterType="com.cm.vo.FamilyVO">
+		insert into family(<include refid="insert_family"/>)
+		values(<include refid="insert_value_family"/>)
+	</insert>	
+
+	<update id="updateFamily" parameterType="com.cm.vo.FamilyVO">
+		update family 
+		<trim prefix="set" suffixOverrides=",">
+			<if test="user_id != null and user_id!=0">user_id = #{user_id},</if>
+			<if test="relation_id != null and relation_id !=0">relation_id = #{relation_id},</if>
+			<if test="name != null">name = #{name},</if>
+			<if test="delete_flag != null">delete_flag=#{delete_flag},</if>
+			<if test="publish_time != null">publish_time=#{publish_time},</if>
+			<if test="publish_id != 0">publish_id=#{publish_id},</if>
+			<if test="publish_name != null">publish_name=#{publish_name},</if>
+			
+		</trim>
+		where id = #{id}
+	</update>
+	
+	<select id="getFamilyById" resultType="com.cm.vo.FamilyVO" parameterType="map">
+		select * from family where id = #{id} 
+	</select>
+</mapper>

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cm.vo.ComplainVO">
+
+	
+	
+	<select id="getComplainList" parameterType="map" resultType="com.cm.vo.ComplainVO">
+		select * from complain where delete_flag = 0 and user_id = #{user_id}
+	</select>
+	
+	<select id="getComplainById" parameterType="map" resultType="com.cm.vo.ComplainVO">
+		select * from complain where id = #{id}
+	</select>
+
+	
+	
+	<sql id="insert_complain">
+        <trim suffix="" suffixOverrides=",">
+            <if test="user_id != 0">
+                user_id,
+            </if>
+            <if test="type_id != 0">
+                type_id,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+            <if test="publish_time !=null ">
+                publish_time,
+            </if>
+            <if test="state != 0">
+                state,
+            </if>
+            <if test="feedback != null ">
+                feedback,
+            </if>
+            <if test="feedback_user_id != 0">
+                feedback_user_id,
+            </if>
+            <if test="feedback_time != null">
+                feedback_user_id,
+            </if>
+            <if test="delete_flag != 0">
+                delete_flag,
+            </if>
+           
+        </trim>
+    </sql>
+    <sql id="insert_value_complain">
+        <trim suffix="" suffixOverrides=",">
+             <if test="user_id != 0">
+                #{user_id},
+            </if>
+            <if test="type_id != 0">
+                #{type_id},
+            </if>
+            <if test="content != null">
+                #{content},
+            </if>
+            <if test="publish_time !=null ">
+                #{publish_time},
+            </if>
+            <if test="state != 0">
+                #{state},
+            </if>
+            <if test="feedback != null ">
+                #{feedback},
+            </if>
+            <if test="feedback_user_id != 0">
+                #{feedback_user_id},
+            </if>
+            <if test="feedback_time != null">
+                #{feedback_time},
+            </if>
+            <if test="delete_flag != 0">
+                #{delete_flag},
+            </if>
+           
+        </trim>
+    </sql>
+	
+	<insert id="addRepair"  parameterType="com.cm.vo.ComplainVO">
+		insert into complain(<include refid="insert_complain"/>)
+		values(<include refid="insert_value_complain"/>)	
+	</insert>
+	
+	<update id="updateComplain" parameterType="com.cm.vo.ComplainVO">
+		update complain 
+		<trim prefix="set" suffixOverrides=",">
+			<if test="user_id != 0">user_id = #{user_id},</if>
+			<if test="type_id != 0">type_id = #{type_id},</if>
+			<if test="content != null">content = #{content},</if>
+			<if test="publish_time != null">publish_time = #{publish_time},</if>
+			<if test="state != 0">state = #{state},</if>
+			<if test="feedback != null">feedback=#{feedback},</if>
+			<if test="feedback_user_id != 0">feedback_user_id=#{feedback_user_id},</if>
+			<if test="feedback_time != null">feedback_time=#{feedback_time},</if>
+			<if test="delete_flag != 0">delete_flag=#{delete_flag},</if>
+            
+		</trim>
+		where id = #{id}
+	</update>
+	
+	<select id="getAllComplain" resultType="com.cm.vo.ComplainVO" parameterType="map">
+		select r.*,u.name as user_name from complain r inner join user u on r.user_id = u.id where r.delete_flag = 0
+		
+		<if test="state != -1 ">
+		and  r.state = #{state}
+		</if>
+		 
+	</select>
+</mapper>

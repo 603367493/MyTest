@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cm.vo.SdjfVO">
+
+	<select id="getSdjfList" parameterType="map" resultType="com.cm.vo.SdjfVO">
+		select * from water_electricity where delete_flag = 0 and user_id = #{user_id}
+		<if test="period !=null">and period = #{period}</if>
+		 order by period
+	</select>
+	
+	<sql id="insert_sdjf">
+        <trim suffix="" suffixOverrides=",">
+            <if test="user_id != null and user_id != 0">
+                user_id,
+            </if>
+            <if test="water_price != 0">
+                water_price,
+            </if>
+            <if test="electricity != 0">
+                electricity,
+            </if>
+            <if test="state != null and state != 0">
+                state,
+            </if>
+            <if test="period != null">
+                period,
+            </if>
+            <if test="jf_time != null">
+                jf_time,
+            </if>
+            <if test="delete_flag != 0">
+                delete_flag,
+            </if>
+             <if test="publish_time != null">
+                publish_time,
+            </if>
+            <if test="publish_id != 0">
+                publish_id,
+            </if>
+            <if test="publish_name != null">
+                publish_name,
+            </if>
+        </trim>
+    </sql>
+    <sql id="insert_value_sdjf">
+        <trim suffix="" suffixOverrides=",">
+            <if test="user_id != null and user_id != 0">
+                #{user_id},
+            </if>
+            <if test="water_price != 0">
+                #{water_price},
+            </if>
+            <if test="electricity != 0">
+                #{electricity},
+            </if>
+            <if test="state != null and state != 0">
+                #{state},
+            </if>
+            <if test="period != null">
+               	#{period},
+            </if>
+            <if test="jf_time != null">
+                #{jf_time},
+            </if>
+            <if test="delete_flag != 0">
+                #{delete_flag},
+            </if>
+             <if test="publish_time != null">
+                #{publish_time},
+            </if>
+            <if test="publish_id != 0 and publish_id != null">
+                #{publish_id},
+            </if>
+            <if test="publish_name != null">
+                #{publish_name},
+            </if>
+        </trim>
+    </sql>
+	
+	<insert id="addSdjf" parameterType="com.cm.vo.SdjfVO">
+		insert into water_electricity(<include refid="insert_sdjf"/>)
+		values(<include refid="insert_value_sdjf"/>)
+	</insert>
+	
+	<update id="updateSdjf" parameterType="com.cm.vo.SdjfVO">
+		update water_electricity 
+		<trim prefix="set" suffixOverrides=",">
+			<if test="user_id != null and user_id!=0">user_id = #{user_id},</if>
+			<if test="water_price != 0 ">water_price = #{water_price},</if>
+			<if test="electricity != 0">electricity = #{electricity},</if>
+			<if test="state !=null and state != 0">state=#{state},</if>
+			<if test="period != null">period=#{period},</if>
+			<if test="jf_time != null">jf_time=#{jf_time},</if>
+			<if test="delete_flag != 0">delete_flag=#{delete_flag},</if>
+			<if test="publish_time != null">publish_time=#{publish_time},</if>
+			<if test="publish_id != 0 and publish_id != null">publish_id=#{publish_id},</if>
+			<if test="publish_name != null">publish_name=#{publish_name},</if>
+		</trim>
+		where id = #{id}
+	</update>
+	
+	<update id="deleteSdjf" parameterType="map">
+		update water_electricity set delete_flag = 1 where id = #{id}
+	</update>
+	
+	<select id="getSdjfById" parameterType="map" resultType="com.cm.vo.SdjfVO">
+		select w.*,u.name as user_name from water_electricity w inner join user u on u.id = w.user_id where w.id = #{id} and w.delete_flag = 0
+	</select>
+	
+</mapper>

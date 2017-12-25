@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cm.vo.CarVO">
+
+	<select id="getCarLocationLists" resultType="com.cm.vo.CarVO" parameterType="map">
+		select c.*,u.name as user_name,l.license as license_name from car_location c left join user u on u.id = c.user_id left join license l on c.license_id = l.id where c.delete_flag = 0 
+		<if test="state != 0">
+			and c.state = #{state} 
+		</if>
+		
+		order by c.id 
+	</select>
+	
+	<update id="buy"  parameterType="map">
+		update  car_location set user_id = #{user_id},userable_time = #{userable_time}, pay_flag = '1', pay_id=#{pay_id}, state=1,license_id=#{licenseId} where id=#{car_id}
+	</update>
+	
+	<select id="getYJFInfo" resultType="com.cm.vo.CarVO" parameterType="map">
+		select *,l.license as license_name from car_location c inner join license l on  l.id = c.license_id where c.delete_flag = 0 and c.user_id = #{user_id} and c.pay_flag =1 
+	</select>
+	
+	<update id="updateUserableTime" parameterType="map">
+		update car_location set userable_time = #{userable_time} where id = #{car_location_id} and user_id = #{user_id}
+	</update>
+
+	
+	<sql id="insert_car">
+        <trim suffix="" suffixOverrides=",">
+            <if test="user_id != null and user_id != 0">
+                user_id,
+            </if>
+            <if test="no != null">
+                no,
+            </if>
+            <if test="state != 0">
+                state,
+            </if>
+            <if test="license_id !=null and license_id!=0">
+                license_id,
+            </if>
+            <if test="userable_time != null">
+                userable_time,
+            </if>
+            <if test="pay_flag != null and pay_flag != 0">
+                pay_flag,
+            </if>
+            <if test="pay_id != 0">
+                pay_id,
+            </if>
+            <if test="delete_flag != 0">
+                delete_flag,
+            </if>
+             <if test="publish_time != null">
+                publish_time,
+            </if>
+            <if test="publish_id != 0">
+                publish_id,
+            </if>
+            <if test="publish_name != null">
+                publish_name,
+            </if>
+        </trim>
+    </sql>
+    <sql id="insert_value_car">
+        <trim suffix="" suffixOverrides=",">
+            <if test="user_id != null and user_id != 0">
+                #{user_id},
+            </if>
+            <if test="no != null">
+                #{no},
+            </if>
+            <if test="state != 0">
+                #{state},
+            </if>
+            <if test="license_id !=null and license_id!=0">
+                #{license_id},
+            </if>
+            <if test="userable_time != null">
+                #{userable_time},
+            </if>
+            <if test="pay_flag != null and pay_flag != 0">
+                #{pay_flag},
+            </if>
+            <if test="pay_id != null and pay_id != 0">
+                #{pay_id},
+            </if>
+            <if test="delete_flag != 0">
+                #{delete_flag},
+            </if>
+            <if test="publish_time != null">
+                #{publish_time},
+            </if>
+            <if test="publish_id != 0">
+                #{publish_id},
+            </if>
+            <if test="publish_name != null">
+                #{publish_name},
+            </if>
+        </trim>
+    </sql>
+	
+	<insert id="addCar" parameterType="com.cm.vo.CarVO">
+		insert into car_location(<include refid="insert_car"/>)
+		values(<include refid="insert_value_car"/>)
+	</insert>
+	
+	<update id="updateFamily" parameterType="com.cm.vo.CarVO">
+		update car_location 
+		<trim prefix="set" suffixOverrides=",">
+			<if test="user_id != null and user_id!=0">user_id = #{user_id},</if>
+			<if test="no != null ">no = #{no},</if>
+			<if test="state != null">state = #{state},</if>
+			<if test="license_id != 0">license_id=#{license_id},</if>
+			<if test="userable_time != null">userable_time=#{userable_time},</if>
+			<if test="pay_flag != 0">pay_flag=#{pay_flag},</if>
+			<if test="pay_id != 0">pay_id=#{pay_id},</if>
+			<if test="delete_flag != 0">delete_flag=#{delete_flag},</if>
+			<if test="publish_time != null">publish_time=#{publish_time},</if>
+			<if test="publish_id != 0">publish_id=#{publish_id},</if>
+			<if test="publish_name != null">publish_name=#{publish_name},</if>
+			
+		</trim>
+		where id = #{id}
+	</update>
+	
+	<select id="getCarById" resultType="com.cm.vo.CarVO" parameterType="map">
+		select * from car_location where 1=1
+		<if test="id != 0 and id != null">and id = #{id}</if>
+		<if test="no != null">and no = #{no}</if>
+	</select>
+	
+	<update id="deleteCar" parameterType="map">
+		update  car_location set delete_flag = 1 where id =#{id}
+	</update>
+</mapper>
